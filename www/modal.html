@@ -22,16 +22,10 @@
 </head>
 <body>
   <h2>Steroids Repro Template</h2>
-  <h1>Modal Crash</h1>
-  <p>After close the modal please wait few sec.</p>
-  <button ontouchend="showModal()">Open Modal</button>
+  <h1>The Modal</h1>
+  <button ontouchend="steroids.modal.hide()">Hide Modal</button>
 
   <script>
-    function showModal() {
-     var webView = new steroids.views.WebView("modal.html");
-     steroids.modal.show(webView);
-     }
-
   </script>
 </body>
 </html>
