@@ -23,14 +23,17 @@
 </head>
 <body>
   <h2>Steroids Repro Template</h2>
-  <button onClick="replaceToHome()">replace</button>
+  <button onClick="unload()">unload home view</button>
 
   <script>
-  var homeView = new steroids.views.WebView("home.html")
-  homeView.preload();
+  var indexView = new steroids.views.WebView({location: "index.html", id: "http://localhost/index.html"});
 
-  function replaceToHome() {
-    steroids.layers.replace(homeView);
+  function unload() {
+    indexView.unload({},{
+      onSuccess: function() {
+        alert("successfully unloaded!")
+      }
+    });
   }
   </script>
 </body>
