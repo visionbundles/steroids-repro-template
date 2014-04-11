@@ -1,0 +1,42 @@
+<!doctype html>
+<html>
+<head>
+  <link rel="stylesheet" type="text/css" href="application.css">
+  <script src="http://localhost/cordova.js"></script>
+  <script src="/components/steroids-js/steroids.js"></script>
+</head>
+<body>
+  <h1>Hello World from dolan.html!</h1>
+  <button onClick="steroids.layers.pop()">Go back</button>
+  <script>
+leftButton = new steroids.buttons.NavigationBarButton();
+leftButton.imagePath = "/pill@2x.png"
+leftButton.onTap = function(){
+	steroids.layers.pop()
+}
+
+function updateNavBar() {
+  steroids.view.navigationBar.update({
+      overrideBackButton: true,
+      buttons: {
+          left: [leftButton]
+      }
+  }, {
+      onSuccess: function() {
+          //alert("successfully set!")
+      },
+      onFailure: function() {
+          alert("failed to set!")
+      }
+  })
+}
+
+setTimeout(
+  function() {
+    updateNavBar();
+  },
+  20
+);
+  </script>
+</body>
+</html>
