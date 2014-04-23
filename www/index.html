@@ -22,10 +22,43 @@
 
 </head>
 <body>
-  <h2>Steroids Repro Template</h2>
+  <h2>Keyboard misalignment after camera has been opened repro</h2>
+
+  <ol>
+    <li>Make Ad Hoc build</li>
+    <li>Click on Test input 2 to see the correct keyboard alignment</li>
+    <li>Open camera (complains about memory leak)</li>
+    <li>Check Test input 2 for alignment</li>
+    <li>Works fine?</li>
+  </ol>
+
+  <p>Test input 1 <input type="text"></input></p>
+
+  <button ontouchend="openCamera()">Open Camera</button>
+
+  <br>
+
+  <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aenean feugiat, lectus non mollis tristique, enim turpis venenatis mauris, ultrices aliquam nunc nibh vel erat. Donec vel turpis pharetra, congue nisl nec, tristique turpis. Donec id rhoncus metus. Fusce justo tellus, pretium sit amet nisl et, bibendum blandit purus. Sed vulputate dui pharetra lacus rhoncus dictum. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nam commodo, lectus at interdum malesuada, ante dui egestas est, et venenatis leo lectus convallis sapien.</p>
+
+  <p>Test input 2 <input type="text"></input></p>
 
   <script>
-    //Add your JavaScripts here
+    function openCamera() {
+      navigator.camera.getPicture(imageReceived, cameraFail, {
+        quality: 100,
+        destinationType: Camera.DestinationType.FILE_URI,
+        correctOrientation: true,
+        targetWidth: 600
+      });
+    }
+
+    function imageReceived(imageURI) {
+      alert("Image captured.");
+    }
+
+    function cameraFail(message) {
+      alert("Camera error: " + message);
+    }
   </script>
 </body>
 </html>
