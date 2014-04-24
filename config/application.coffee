@@ -1,7 +1,7 @@
 # For an explanation of the steroids.config properties, see the guide at
 # http://guides.appgyver.com/steroids/guides/project_configuration/config-application-coffee/
 
-steroids.config.name = "muna-html"
+steroids.config.name = "Steroids Repro Template"
 
 # -- Initial Location --
 steroids.config.location = "http://localhost/index.html"
