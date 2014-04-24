@@ -16,7 +16,7 @@
     margin: 1em;
   }
   body {
-    background-color: white; 
+    background-color: white;
   }
   </style>
 
@@ -24,8 +24,21 @@
 <body>
   <h2>Steroids Repro Template</h2>
 
+  <input type="text">
+  <br><br>
+  <button onClick="openCamera()">Camera</button>
+
   <script>
-    //Add your JavaScripts here
+  function cameraSuccess(imageURI) {
+    console.log("win!", imageURI)
+  }
+  function cameraFail() {
+    console.log("fal!")
+  }
+
+  function openCamera() {
+    navigator.camera.getPicture(cameraSuccess, cameraFail);
+  }
   </script>
 </body>
 </html>
