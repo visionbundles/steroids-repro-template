@@ -1,4 +1,4 @@
-/*! steroids-js - v3.1.10 - 2014-05-21 14:58 */
+/*! steroids-js - v3.1.11 - 2014-05-22 17:28 */
 (function(window){
 var Bridge,
   __bind = function(fn, me){ return function(){ return fn.apply(me, arguments); }; };
@@ -64,39 +64,45 @@ Bridge = (function() {
       callbacks: {
         recurring: function(parameters) {
           var callback, _i, _len, _ref, _results;
-          _ref = options.recurringCallbacks;
-          _results = [];
-          for (_i = 0, _len = _ref.length; _i < _len; _i++) {
-            callback = _ref[_i];
-            if (callback != null) {
-              _results.push(callback.call(_this, parameters, options));
+          if (options.recurringCallbacks != null) {
+            _ref = options.recurringCallbacks;
+            _results = [];
+            for (_i = 0, _len = _ref.length; _i < _len; _i++) {
+              callback = _ref[_i];
+              if (callback != null) {
+                _results.push(callback.call(_this, parameters, options));
+              }
             }
+            return _results;
           }
-          return _results;
         },
         success: function(parameters) {
           var callback, _i, _len, _ref, _results;
-          _ref = options.successCallbacks;
-          _results = [];
-          for (_i = 0, _len = _ref.length; _i < _len; _i++) {
-            callback = _ref[_i];
-            if (callback != null) {
-              _results.push(callback.call(_this, parameters, options));
+          if (options.successCallbacks != null) {
+            _ref = options.successCallbacks;
+            _results = [];
+            for (_i = 0, _len = _ref.length; _i < _len; _i++) {
+              callback = _ref[_i];
+              if (callback != null) {
+                _results.push(callback.call(_this, parameters, options));
+              }
             }
+            return _results;
           }
-          return _results;
         },
         failure: function(parameters) {
           var callback, _i, _len, _ref, _results;
-          _ref = options.failureCallbacks;
-          _results = [];
-          for (_i = 0, _len = _ref.length; _i < _len; _i++) {
-            callback = _ref[_i];
-            if (callback != null) {
-              _results.push(callback.call(_this, parameters, options));
+          if (options.failureCallbacks != null) {
+            _ref = options.failureCallbacks;
+            _results = [];
+            for (_i = 0, _len = _ref.length; _i < _len; _i++) {
+              callback = _ref[_i];
+              if (callback != null) {
+                _results.push(callback.call(_this, parameters, options));
+              }
             }
+            return _results;
           }
-          return _results;
         }
       }
     });
@@ -1447,7 +1453,8 @@ LayerCollection = (function(_super) {
     }
     return steroids.nativeBridge.nativeCall({
       method: "popAllLayers",
-      successCallbacks: [callbacks.onSuccess],
+      successCallbacks: [callbacks.onSuccess, callbacks.onTransitionStarted],
+      recurringCallbacks: [callbacks.onTransitionEnd],
       failureCallbacks: [callbacks.onFailure]
     });
   };
@@ -3343,7 +3350,7 @@ PostMessage = (function() {
 
 }).call(this);
 ;window.steroids = {
-  version: "3.1.10",
+  version: "3.1.11",
   Animation: Animation,
   File: File,
   views: {
