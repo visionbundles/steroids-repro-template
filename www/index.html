@@ -4,11 +4,11 @@
   <meta charset="utf8">
   <meta name="viewport" content="width=device-width">
   <title>Steroids Repro Template</title>
-
   <!-- cordova.js is served from localhost to ensure the correct version -->
-  <script src="http://localhost/cordova.js"></script>
   <script src="/components/steroids-js/steroids.js"></script>
-
+  <script src="/components/steroids-addons/index.js"></script>
+  <script src="http://localhost/cordova.js"></script>
+  <script src="/components/angular/angular.js"></script>
   <!--body background-color is set for Android not to show the loading screen forever-->
   <style>
   button {
@@ -16,16 +16,50 @@
     margin: 1em;
   }
   body {
-    background-color: white; 
+    background-color: white;
   }
   </style>
 
 </head>
-<body>
-  <h2>Steroids Repro Template</h2>
-
+<body ng-app ng-controller="testController">
+  <h2>Notification STATUS: {{ ready }}</h2>
+  Messages ({{ messages.length }}):
+  <ul>
+    <li ng-repeat="m in messages">
+      {{ m }}
+    </li>
+  </ul>
   <script>
-    //Add your JavaScripts here
+    function testController($scope) {
+      $scope.ready = false;
+      $scope.messages = [];
+
+      _openModal = function() {
+        var testView = new steroids.views.WebView("/modal.html");
+        steroids.modal.show(testView);
+      };
+
+      // 1. init urbanairship plugin
+      steroids.addons.urbanairship.enabled.then(function(){
+        $scope.$apply(function(){
+          $scope.ready = true;
+        });
+      });
+
+      // 2. setup received push notification callback
+      steroids.addons.urbanairship.notifications.onValue(function(notification) {
+        $scope.$apply(function(){
+          $scope.messages.push(notification);
+
+          // 3. works fine before open modal
+          //    if modal opening still work
+          //    after call steroids.modal.hide() will not tragger onValue event anymore
+          if ($scope.messages.length == 3) {
+            _openModal();
+          }
+        });
+      });
+    }
   </script>
 </body>
 </html>
