@@ -1,4 +1,4 @@
-/*! steroids-js - v3.1.11 - 2014-05-22 17:28 */
+/*! steroids-js - v3.1.9 - 2014-05-06 17:47 */
 (function(window){
 var Bridge,
   __bind = function(fn, me){ return function(){ return fn.apply(me, arguments); }; };
@@ -12,7 +12,7 @@ Bridge = (function() {
 
   Bridge.getBestNativeBridge = function() {
     var bridgeClass, prioritizedList, _i, _len;
-    prioritizedList = [TizenBridge, WebBridge, AndroidBridge, WebsocketBridge, JSCoreBridge];
+    prioritizedList = [TizenBridge, WebBridge, AndroidBridge, WebsocketBridge];
     if (this.bestNativeBridge == null) {
       for (_i = 0, _len = prioritizedList.length; _i < _len; _i++) {
         bridgeClass = prioritizedList[_i];
@@ -64,45 +64,39 @@ Bridge = (function() {
       callbacks: {
         recurring: function(parameters) {
           var callback, _i, _len, _ref, _results;
-          if (options.recurringCallbacks != null) {
-            _ref = options.recurringCallbacks;
-            _results = [];
-            for (_i = 0, _len = _ref.length; _i < _len; _i++) {
-              callback = _ref[_i];
-              if (callback != null) {
-                _results.push(callback.call(_this, parameters, options));
-              }
+          _ref = options.recurringCallbacks;
+          _results = [];
+          for (_i = 0, _len = _ref.length; _i < _len; _i++) {
+            callback = _ref[_i];
+            if (callback != null) {
+              _results.push(callback.call(_this, parameters, options));
             }
-            return _results;
           }
+          return _results;
         },
         success: function(parameters) {
           var callback, _i, _len, _ref, _results;
-          if (options.successCallbacks != null) {
-            _ref = options.successCallbacks;
-            _results = [];
-            for (_i = 0, _len = _ref.length; _i < _len; _i++) {
-              callback = _ref[_i];
-              if (callback != null) {
-                _results.push(callback.call(_this, parameters, options));
-              }
+          _ref = options.successCallbacks;
+          _results = [];
+          for (_i = 0, _len = _ref.length; _i < _len; _i++) {
+            callback = _ref[_i];
+            if (callback != null) {
+              _results.push(callback.call(_this, parameters, options));
             }
-            return _results;
           }
+          return _results;
         },
         failure: function(parameters) {
           var callback, _i, _len, _ref, _results;
-          if (options.failureCallbacks != null) {
-            _ref = options.failureCallbacks;
-            _results = [];
-            for (_i = 0, _len = _ref.length; _i < _len; _i++) {
-              callback = _ref[_i];
-              if (callback != null) {
-                _results.push(callback.call(_this, parameters, options));
-              }
+          _ref = options.failureCallbacks;
+          _results = [];
+          for (_i = 0, _len = _ref.length; _i < _len; _i++) {
+            callback = _ref[_i];
+            if (callback != null) {
+              _results.push(callback.call(_this, parameters, options));
             }
-            return _results;
           }
+          return _results;
         }
       }
     });
@@ -123,15 +117,7 @@ Bridge = (function() {
     request.parameters["screen"] = window.top.AG_SCREEN_ID;
     request.parameters["layer"] = window.top.AG_LAYER_ID;
     request.parameters["udid"] = window.top.AG_WEBVIEW_UDID;
-    request = this.parseMessage(request);
-    return this.sendMessageToNative(request);
-  };
-
-  Bridge.prototype.parseMessage = function(message) {
-    if (message == null) {
-      message = {};
-    }
-    return JSON.stringify(message);
+    return this.sendMessageToNative(JSON.stringify(request));
   };
 
   Bridge.prototype.storeCallbacks = function(options) {
@@ -320,10 +306,8 @@ WebsocketBridge = (function(_super) {
     this.reopen();
   }
 
-  WebsocketBridge.websocketBridgeUsable = false;
-
   WebsocketBridge.isUsable = function() {
-    return WebsocketBridge.websocketBridgeUsable;
+    return true;
   };
 
   WebsocketBridge.prototype.reopen = function() {
@@ -471,60 +455,6 @@ TizenBridge = (function(_super) {
   };
 
   return TizenBridge;
-
-})(Bridge);
-;var JSCoreBridge,
-  __bind = function(fn, me){ return function(){ return fn.apply(me, arguments); }; },
-  __hasProp = {}.hasOwnProperty,
-  __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; };
-
-JSCoreBridge = (function(_super) {
-  __extends(JSCoreBridge, _super);
-
-  function JSCoreBridge() {
-    this.message_handler = __bind(this.message_handler, this);
-    this.executeInWebThread = __bind(this.executeInWebThread, this);
-    return true;
-  }
-
-  JSCoreBridge.isUsable = function() {
-    return true;
-  };
-
-  JSCoreBridge.prototype.sendMessageToNative = function(message) {
-    var _this = this;
-    if (window.__JSCoreBridgeImpl != null) {
-      return window.__JSCoreBridgeImpl.send(message);
-    } else {
-      return window.steroids.on("jsCoreBridgeUsable", function() {
-        return window.__JSCoreBridgeImpl.send(message);
-      });
-    }
-  };
-
-  JSCoreBridge.prototype.parseMessage = function(message) {
-    if (message == null) {
-      message = {};
-    }
-    return message;
-  };
-
-  JSCoreBridge.prototype.executeInWebThread = function(msg) {
-    if ((msg != null ? msg.callback : void 0) != null) {
-      if (this.callbacks[msg.callback] != null) {
-        return this.callbacks[msg.callback].call(msg.parameters, msg.parameters);
-      }
-    }
-  };
-
-  JSCoreBridge.prototype.message_handler = function(msg) {
-    var _this = this;
-    return setTimeout(function() {
-      return _this.executeInWebThread(msg);
-    }, 1);
-  };
-
-  return JSCoreBridge;
 
 })(Bridge);
 ;var Events;
@@ -1134,8 +1064,8 @@ Modal = (function(_super) {
         };
         parameters.keepTransitionHelper = options.keepLoading;
         parameters.disableAnimation = options.disableAnimation;
-        if (options.navigationBar === true) {
-          parameters.hidesNavigationBar = false;
+        if (options.hidesNavigationBar != null) {
+          parameters.hidesNavigationBar = options.hidesNavigationBar;
         } else {
           parameters.hidesNavigationBar = true;
         }
@@ -1165,7 +1095,7 @@ Modal = (function(_super) {
     });
   };
 
-  Modal.prototype.hideAll = function(options, callbacks) {
+  Modal.prototype.closeAll = function(options, callbacks) {
     if (options == null) {
       options = {};
     }
@@ -1397,8 +1327,8 @@ DrawerCollection = (function(_super) {
     if (options.closeGestures != null) {
       parameters.closeGestures = options.closeGestures;
     }
-    if (options.stretchDrawer != null) {
-      parameters.strechDrawer = options.stretchDrawer;
+    if (options.strechDrawer != null) {
+      parameters.strechDrawer = options.strechDrawer;
     }
     if (options.centerViewInteractionMode != null) {
       parameters.centerViewInteractionMode = options.centerViewInteractionMode;
@@ -1453,8 +1383,7 @@ LayerCollection = (function(_super) {
     }
     return steroids.nativeBridge.nativeCall({
       method: "popAllLayers",
-      successCallbacks: [callbacks.onSuccess, callbacks.onTransitionStarted],
-      recurringCallbacks: [callbacks.onTransitionEnd],
+      successCallbacks: [callbacks.onSuccess],
       failureCallbacks: [callbacks.onFailure]
     });
   };
@@ -2204,7 +2133,7 @@ WebView = (function(_super) {
     }
     this.params = this.getParams();
     allowedRotations = (_ref = window.AG_allowedRotationsDefaults) != null ? _ref : [0];
-    this.setAllowedRotations(allowedRotations);
+    this.setAllowedRotations([0]);
   }
 
   WebView.prototype.preload = function(options, callbacks) {
@@ -2308,9 +2237,6 @@ WebView = (function(_super) {
       callbacks = {};
     }
     this.allowedRotations = options.constructor.name === "Array" ? options : options.allowedRotations;
-    if ((this.allowedRotations == null) || this.allowedRotations.length === 0) {
-      this.allowedRotations = [0];
-    }
     window.shouldRotateToOrientation = function(orientation) {
       if (__indexOf.call(_this.allowedRotations, orientation) >= 0) {
         return true;
@@ -2321,32 +2247,19 @@ WebView = (function(_super) {
     return (_ref = callbacks.onSuccess) != null ? _ref.call() : void 0;
   };
 
-  WebView.prototype.mapDegreesToOrientations = function(degrees) {
-    if (degrees === 0 || degrees === "0") {
-      return "portrait";
-    } else if (degrees === 180 || degrees === "180") {
-      return "portraitupsidedown";
-    } else if (degrees === -90 || degrees === "-90") {
-      return "landscapeleft";
-    } else if (degrees === 90 || degrees === "90") {
-      return "landscaperight";
-    }
-  };
-
   WebView.prototype.rotateTo = function(options, callbacks) {
-    var degrees, orientation;
+    var degrees;
     if (options == null) {
       options = {};
     }
     if (callbacks == null) {
       callbacks = {};
     }
-    degrees = options.constructor.name === "String" || options.constructor.name === "Number" ? options : options.degrees;
-    orientation = this.mapDegreesToOrientations(degrees);
+    degrees = options.constructor.name === "String" ? options : options.degrees;
     return steroids.nativeBridge.nativeCall({
-      method: "setOrientation",
+      method: "rotateTo",
       parameters: {
-        orientation: orientation
+        orientation: degrees
       },
       successCallbacks: [callbacks.onSuccess],
       failureCallbacks: [callbacks.onFailure]
@@ -3261,64 +3174,6 @@ Notifications = (function() {
   return Notifications;
 
 })();
-;var InitialView;
-
-InitialView = (function() {
-  function InitialView() {}
-
-  InitialView.prototype.dismiss = function(options, callbacks) {
-    var parameters;
-    if (options == null) {
-      options = {};
-    }
-    if (callbacks == null) {
-      callbacks = {};
-    }
-    console.log("InitialView.dismiss called");
-    parameters = {};
-    if (options.animation != null) {
-      parameters.animation = options.animation;
-    } else {
-      parameters.animation = new steroids.Animation({
-        transition: "fade"
-      });
-    }
-    return steroids.nativeBridge.nativeCall({
-      method: "dismissInitialView",
-      parameters: parameters,
-      successCallbacks: [callbacks.onSuccess],
-      failureCallbacks: [callbacks.onFailure]
-    });
-  };
-
-  InitialView.prototype.show = function(options, callbacks) {
-    var parameters;
-    if (options == null) {
-      options = {};
-    }
-    if (callbacks == null) {
-      callbacks = {};
-    }
-    console.log("InitialView.show called");
-    parameters = {};
-    if (options.animation != null) {
-      parameters.animation = options.animation;
-    } else {
-      parameters.animation = new steroids.Animation({
-        transition: "fade"
-      });
-    }
-    return steroids.nativeBridge.nativeCall({
-      method: "showInitialView",
-      parameters: parameters,
-      successCallbacks: [callbacks.onSuccess],
-      failureCallbacks: [callbacks.onFailure]
-    });
-  };
-
-  return InitialView;
-
-})();
 ;var PostMessage;
 
 PostMessage = (function() {
@@ -3350,7 +3205,7 @@ PostMessage = (function() {
 
 }).call(this);
 ;window.steroids = {
-  version: "3.1.11",
+  version: "3.1.9",
   Animation: Animation,
   File: File,
   views: {
@@ -3451,8 +3306,6 @@ window.steroids.waitingForComponents.push("Events.initialVisibility");
 window.steroids.app = new App;
 
 Events.extend();
-
-window.steroids.initialView = new InitialView;
 
 window.steroids.drawers = new DrawerCollection;
 
