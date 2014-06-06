@@ -12,6 +12,8 @@
     "tests"
   ],
   "dependencies": {
-    "steroids-js": "3.1.x"
+    "steroids-js": "3.1.9",
+    "angular": "1.2.11",
+    "steroids-addons": "https://14028:GAWAEFCC3VF45FJYYYRQZ7P7TNV6DJMT45PXANYCCQ3E3S7HMH6QX2GDGLSSBZDTMAQFNP8M4M@addons.appgyver.com/steroids-addons.js?version=3.1.1"
   }
 }
